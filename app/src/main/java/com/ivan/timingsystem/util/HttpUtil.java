@@ -26,14 +26,13 @@ import okhttp3.Response;
 public class HttpUtil {
     private static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");//mdiatype 这个需要和服务端保持一致
     private static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("text/x-markdown; charset=utf-8");//mdiatype 这个需要和服务端保持一致
-    private static final String TAG = RequestManager.class.getSimpleName();
-    private static final String BASE_URL = "http://xxx.com/openapi";//请求接口根地址
+    private static final String TAG = HttpUtil.class.getSimpleName();
     private static volatile RequestManager mInstance;//单利引用
     public static final int TYPE_GET = 0;//get请求
     public static final int TYPE_POST_JSON = 1;//post请求参数为json
     public static final int TYPE_POST_FORM = 2;//post请求参数为表单
-    private OkHttpClient mOkHttpClient;//okHttpClient 实例
-    private Handler okHttpHandler;//全局处理子线程和M主线程通信
+    private OkHttpClient mOkHttpClient=new OkHttpClient();//okHttpClient 实例
+    private Handler okHttpHandler=new Handler();//全局处理子线程和M主线程通信
 
 
 
@@ -162,7 +161,7 @@ public class HttpUtil {
                 pos++;
             }
             //补全请求地址
-            String requestUrl = String.format("%s/%s?%s", BASE_URL, actionUrl, tempParams.toString());
+            String requestUrl = String.format("%s/%s?%s", Config.Url, actionUrl, tempParams.toString());
             //创建一个请求
             Request request = addHeaders().url(requestUrl).build();
             //创建一个Call
@@ -196,7 +195,7 @@ public class HttpUtil {
             }
             String params = tempParams.toString();
             RequestBody body = RequestBody.create(MEDIA_TYPE_JSON, params);
-            String requestUrl = String.format("%s/%s", BASE_URL, actionUrl);
+            String requestUrl = String.format("%s/%s", Config.Url, actionUrl);
             final Request request = addHeaders().url(requestUrl).post(body).build();
             final Call call = mOkHttpClient.newCall(request);
             call.enqueue(new Callback() {
@@ -242,7 +241,7 @@ public class HttpUtil {
                 pos++;
             }
             //补全请求地址
-            String requestUrl = String.format("%s/%s", BASE_URL, actionUrl);
+            String requestUrl = String.format("%s/%s", Config.Url, actionUrl);
             //生成参数
             String params = tempParams.toString();
             //创建一个请求实体对象 RequestBody
@@ -278,7 +277,7 @@ public class HttpUtil {
             //生成表单实体对象
             RequestBody formBody = builder.build();
             //补全请求地址
-            String requestUrl = String.format("%s/%s", BASE_URL, actionUrl);
+            String requestUrl = String.format("%s/%s", Config.Url, actionUrl);
             //创建一个请求
             final Request request = addHeaders().url(requestUrl).post(formBody).build();
             //创建一个Call
@@ -308,7 +307,7 @@ public class HttpUtil {
                 builder.add(key, paramsMap.get(key));
             }
             RequestBody formBody = builder.build();
-            String requestUrl = String.format("%s/%s", BASE_URL, actionUrl);
+            String requestUrl = String.format("%s/%s", Config.Url, actionUrl);
             final Request request = addHeaders().url(requestUrl).post(formBody).build();
             final Call call = mOkHttpClient.newCall(request);
             call.enqueue(new Callback() {
