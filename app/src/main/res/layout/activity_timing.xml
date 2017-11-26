@@ -72,21 +72,73 @@
                         android:gravity="right"
                         android:padding="5dp"
                         android:text="当前时间：10：10"
-                        android:textAlignment="textEnd"
+
                         android:textSize="18sp" />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/textView5"
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|center_horizontal"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:padding="10dp"
-                    android:text="序号           手机号码            入场时间            退场时间            超时    "
-                    android:textSize="18sp" />
+                    android:orientation="horizontal">
 
-                <ListView
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:padding="10dp"
+                        android:text="序号"
+                        android:textSize="18sp" />
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:padding="10dp"
+                        android:text="手机号码"
+                        android:textSize="18sp" />
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:padding="10dp"
+                        android:text="入场时间"
+                        android:textSize="18sp" />
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:padding="10dp"
+                        android:text="退场时间"
+                        android:textSize="18sp" />
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:padding="10dp"
+                        android:text="超时"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <com.handmark.pulltorefresh.library.PullToRefreshListView
                     android:id="@+id/customerListview"
                     android:layout_width="match_parent"
                     android:layout_height="577dp"
@@ -94,7 +146,7 @@
                     android:background="#FFFFFF"
                     android:padding="10dp">
 
-                </ListView>
+                </com.handmark.pulltorefresh.library.PullToRefreshListView>
 
                 <LinearLayout
                     android:layout_width="match_parent"
