@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -21,14 +22,16 @@ import com.ivan.timingsystem.model.GetBillListModel;
 import com.ivan.timingsystem.model.NomalModel;
 import com.ivan.timingsystem.util.HttpUtil;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class TimingActivity extends Activity {
 
-    TextView etPhone;
+    TextView etPhone,tvTime;
     Button btnEnter, btnExit;
     com.handmark.pulltorefresh.library.PullToRefreshListView listView;
 
@@ -36,6 +39,7 @@ public class TimingActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timing);
+        tvTime=(TextView) findViewById(R.id.tvTime);
         etPhone = (TextView) findViewById(R.id.etPhone);
         btnEnter = (Button) findViewById(R.id.btnEnter);
         btnExit = (Button) findViewById(R.id.btnExit);
@@ -70,7 +74,25 @@ public class TimingActivity extends Activity {
         });
 
         InitData();
+
+
+        handler.postDelayed(runnable, 1000);
     }
+
+    Handler handler = new Handler();
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");//可以方便地修改日期格式
+
+
+
+            String date=dateFormat.format(new java.util.Date());
+            tvTime.setText("当前时间：" + date);
+            handler.postDelayed(this, 1000);
+        }
+    };
+
 
     public void KeyBoardClick(View view) {
         switch (view.getId()) {
@@ -149,12 +171,8 @@ public class TimingActivity extends Activity {
                             public void onReqSuccess(Object result) {
                                 Gson gson = new Gson();
                                 NomalModel model = gson.fromJson(result.toString(), NomalModel.class);
-                                if (model.getResultStatus().equals("Success")) {
-                                    Log.d("onReqSuccess", "Success");
-
-                                    Toast.makeText(TimingActivity.this, model.getResult(), Toast.LENGTH_SHORT).show();
-                                }
-
+                                Toast.makeText(TimingActivity.this, model.getResult(), Toast.LENGTH_SHORT).show();
+//
                             }
 
                             @Override
@@ -172,7 +190,35 @@ public class TimingActivity extends Activity {
 
 
     public void ExitFunciton() {
+        new AlertDialog.Builder(TimingActivity.this)
+                .setTitle("确认")
+                .setMessage("确定退场吗？")
+                .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
+                        HttpUtil hutil = new HttpUtil();
+                        HashMap<String, String> map = new HashMap();
+
+                        map.put("BillNo", etPhone.getText().toString());
+                        hutil.requestAsyn("UpdateBillUseing", HttpUtil.TYPE_GET, map, new HttpUtil.ReqCallBack<Object>() {
+                            @Override
+                            public void onReqSuccess(Object result) {
+                                Gson gson = new Gson();
+                                NomalModel model = gson.fromJson(result.toString(), NomalModel.class);
+                                Toast.makeText(TimingActivity.this, model.getResult(), Toast.LENGTH_SHORT).show();
+//
+                            }
+
+                            @Override
+                            public void onReqFailed(String errorMsg) {
+
+                            }
+                        });
+                    }
+                })
+                .setNegativeButton("否", null)
+                .show();
     }
 
 
@@ -266,6 +312,7 @@ public class TimingActivity extends Activity {
 
         Log.d("onKeyDown", "shuzi"+keyCode);
 
+        if((keyCode-7)>=0&&(keyCode-7)<10)
         etPhone.setText(etPhone.getText().toString() + (keyCode-7));
         return  false;
         //return super.onKeyDown(keyCode, event);

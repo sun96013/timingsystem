@@ -2,11 +2,11 @@ package com.ivan.timingsystem.model;
 
 import java.util.List;
 
-/**
- * Created by Administrator on 2017/11/27/027.
- */
 
-public class GetBillListModel {
+
+public class GetBillListModel
+{
+
 
     /**
      * ResultStatus : Success
@@ -178,3 +178,4 @@ public class GetBillListModel {
         }
     }
 }
+
