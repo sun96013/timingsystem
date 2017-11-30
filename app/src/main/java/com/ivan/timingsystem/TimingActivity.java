@@ -11,6 +11,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -22,24 +24,25 @@ import com.ivan.timingsystem.model.GetBillListModel;
 import com.ivan.timingsystem.model.NomalModel;
 import com.ivan.timingsystem.util.HttpUtil;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 public class TimingActivity extends Activity {
 
-    TextView etPhone,tvTime;
+    TextView etPhone, tvTime;
     Button btnEnter, btnExit;
     com.handmark.pulltorefresh.library.PullToRefreshListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);//隐藏标题栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//隐藏状态栏
+
         setContentView(R.layout.activity_timing);
-        tvTime=(TextView) findViewById(R.id.tvTime);
+        tvTime = (TextView) findViewById(R.id.tvTime);
         etPhone = (TextView) findViewById(R.id.etPhone);
         btnEnter = (Button) findViewById(R.id.btnEnter);
         btnExit = (Button) findViewById(R.id.btnExit);
@@ -86,8 +89,7 @@ public class TimingActivity extends Activity {
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");//可以方便地修改日期格式
 
 
-
-            String date=dateFormat.format(new java.util.Date());
+            String date = dateFormat.format(new java.util.Date());
             tvTime.setText("当前时间：" + date);
             handler.postDelayed(this, 1000);
         }
@@ -172,6 +174,9 @@ public class TimingActivity extends Activity {
                                 Gson gson = new Gson();
                                 NomalModel model = gson.fromJson(result.toString(), NomalModel.class);
                                 Toast.makeText(TimingActivity.this, model.getResult(), Toast.LENGTH_SHORT).show();
+                                if (model.getResultStatus().equals("Success")) {
+                                    etPhone.setText("");
+                                }
 //
                             }
 
@@ -207,7 +212,9 @@ public class TimingActivity extends Activity {
                                 Gson gson = new Gson();
                                 NomalModel model = gson.fromJson(result.toString(), NomalModel.class);
                                 Toast.makeText(TimingActivity.this, model.getResult(), Toast.LENGTH_SHORT).show();
-//
+                                if (model.getResultStatus().equals("Success")) {
+                                    etPhone.setText("");
+                                }
                             }
 
                             @Override
@@ -296,8 +303,7 @@ public class TimingActivity extends Activity {
     }
 
 
-
-//    KEYCODE_0	按键'0'	7
+    //    KEYCODE_0	按键'0'	7
 //    KEYCODE_1	按键'1'	8
 //    KEYCODE_2	按键'2'	9
 //    KEYCODE_3	按键'3'	10
@@ -310,17 +316,17 @@ public class TimingActivity extends Activity {
 //    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-        Log.d("onKeyDown", "shuzi"+keyCode);
+        Log.d("onKeyDown", "shuzi" + keyCode);
 
-        if((keyCode-7)>=0&&(keyCode-7)<10)
-        etPhone.setText(etPhone.getText().toString() + (keyCode-7));
-        return  false;
+        if ((keyCode - 7) >= 0 && (keyCode - 7) < 10)
+            etPhone.setText(etPhone.getText().toString() + (keyCode - 7));
+        return false;
         //return super.onKeyDown(keyCode, event);
     }
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        return  false;
-      //  return super.onKeyUp(keyCode, event);
+        return false;
+        //  return super.onKeyUp(keyCode, event);
     }
 }
