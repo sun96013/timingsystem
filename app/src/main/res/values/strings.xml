@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">timingsystem</string>
+    <string name="app_name">金龙科目二练车计时系统</string>
 
     <string name="title_activity_timing">TimingActivity</string>
     <string name="dummy_button">Dummy Button</string>

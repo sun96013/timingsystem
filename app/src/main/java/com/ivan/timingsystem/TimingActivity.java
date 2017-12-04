@@ -21,15 +21,10 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
 import com.ivan.timingsystem.model.GetBillListModel;
 import com.ivan.timingsystem.model.NomalModel;
 import com.ivan.timingsystem.util.HttpUtil;
 
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,6 +36,7 @@ public class TimingActivity extends Activity {
     TextView etPhone, tvTime;
     Button btnEnter, btnExit;
     com.handmark.pulltorefresh.library.PullToRefreshListView listView;
+    int refreshListIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,11 +89,17 @@ public class TimingActivity extends Activity {
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
+            if(refreshListIndex==60)
+            {
+                InitData();
+                refreshListIndex=0;
+            }
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");//可以方便地修改日期格式
 
 
             String date = dateFormat.format(new java.util.Date());
             tvTime.setText("当前时间：" + date);
+            refreshListIndex++;
             handler.postDelayed(this, 1000);
         }
     };
@@ -136,7 +138,7 @@ public class TimingActivity extends Activity {
         hutil.requestAsyn("GetBillList", HttpUtil.TYPE_GET, map, new HttpUtil.ReqCallBack<Object>() {
             @Override
             public void onReqSuccess(Object result) {
-              //  Gson gson = new Gson();
+                //  Gson gson = new Gson();
                 Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
 
 
@@ -298,26 +300,21 @@ public class TimingActivity extends Activity {
             viewHolder.tvInTime.setText(list.get(position).getDStartTime());
             viewHolder.tvOutTime.setText(list.get(position).getDEndTime());
             Calendar calendar = Calendar.getInstance();
-            String hour= list.get(position).getDEndTime().replace(":00","");
+            String hour = list.get(position).getDEndTime().replace(":00", "");
             calendar.setTime(list.get(position).getdReservationDay());
-            int inthour=Integer.parseInt(hour);
+            int inthour = Integer.parseInt(hour);
             calendar.set(Calendar.HOUR_OF_DAY, inthour);
             long end = calendar.getTimeInMillis();
-            Calendar startcalendar=Calendar.getInstance();
+            Calendar startcalendar = Calendar.getInstance();
             long begin = startcalendar.getTimeInMillis();
-            long min = (begin-end) / (1000 * 3600);
-            if(min>0)
-            {
-                viewHolder.tvOvertime.setText((int)min+"分钟");
-            }
-            else
-            {
+            long min = (begin - end) / (1000 * 3600);
+            if (min > 0) {
+                viewHolder.tvOvertime.setText((int) min + "分钟");
+            } else {
                 viewHolder.tvOvertime.setText("0");
             }
 //            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 //            String dateStr = sdf.format(calendar.getTime());
-
-
 
 
             return convertView;
@@ -348,8 +345,7 @@ public class TimingActivity extends Activity {
 
         Log.d("onKeyDown", "shuzi" + keyCode);
 
-        if ((keyCode - 7) >= 0 && (keyCode - 7) < 10)
-        {
+        if ((keyCode - 7) >= 0 && (keyCode - 7) < 10) {
             etPhone.setText(etPhone.getText().toString() + (keyCode - 7));
         }
 
