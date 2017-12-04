@@ -20,11 +20,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.ivan.timingsystem.model.GetBillListModel;
 import com.ivan.timingsystem.model.NomalModel;
 import com.ivan.timingsystem.util.HttpUtil;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -129,7 +136,10 @@ public class TimingActivity extends Activity {
         hutil.requestAsyn("GetBillList", HttpUtil.TYPE_GET, map, new HttpUtil.ReqCallBack<Object>() {
             @Override
             public void onReqSuccess(Object result) {
-                Gson gson = new Gson();
+              //  Gson gson = new Gson();
+                Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+
+
                 final GetBillListModel model = gson.fromJson(result.toString(), GetBillListModel.class);
                 if (model.getResultStatus().equals("Success")) {
                     Log.d("onReqSuccess", "Success");
@@ -287,7 +297,27 @@ public class TimingActivity extends Activity {
             viewHolder.tvPhone.setText(list.get(position).getUser_Phone() + "");
             viewHolder.tvInTime.setText(list.get(position).getDStartTime());
             viewHolder.tvOutTime.setText(list.get(position).getDEndTime());
-            viewHolder.tvOvertime.setText("0");
+            Calendar calendar = Calendar.getInstance();
+            String hour= list.get(position).getDEndTime().replace(":00","");
+            calendar.setTime(list.get(position).getdReservationDay());
+            int inthour=Integer.parseInt(hour);
+            calendar.set(Calendar.HOUR_OF_DAY, inthour);
+            long end = calendar.getTimeInMillis();
+            Calendar startcalendar=Calendar.getInstance();
+            long begin = startcalendar.getTimeInMillis();
+            long days = (begin-end) / (1000 * 3600);
+            if(days>0)
+            {
+                viewHolder.tvOvertime.setText((int)days+"");
+            }
+            else
+            {
+                viewHolder.tvOvertime.setText("0");
+            }
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+//            String dateStr = sdf.format(calendar.getTime());
+
+
 
 
             return convertView;
@@ -319,7 +349,10 @@ public class TimingActivity extends Activity {
         Log.d("onKeyDown", "shuzi" + keyCode);
 
         if ((keyCode - 7) >= 0 && (keyCode - 7) < 10)
+        {
             etPhone.setText(etPhone.getText().toString() + (keyCode - 7));
+        }
+
         return false;
         //return super.onKeyDown(keyCode, event);
     }
