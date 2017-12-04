@@ -305,10 +305,10 @@ public class TimingActivity extends Activity {
             long end = calendar.getTimeInMillis();
             Calendar startcalendar=Calendar.getInstance();
             long begin = startcalendar.getTimeInMillis();
-            long days = (begin-end) / (1000 * 3600);
-            if(days>0)
+            long min = (begin-end) / (1000 * 3600);
+            if(min>0)
             {
-                viewHolder.tvOvertime.setText((int)days+"");
+                viewHolder.tvOvertime.setText((int)min+"分钟");
             }
             else
             {
