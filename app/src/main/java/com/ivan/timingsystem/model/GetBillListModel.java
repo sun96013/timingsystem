@@ -1,11 +1,10 @@
 package com.ivan.timingsystem.model;
 
+import java.util.Date;
 import java.util.List;
 
 
-
-public class GetBillListModel
-{
+public class GetBillListModel {
 
 
     /**
@@ -52,6 +51,7 @@ public class GetBillListModel
 
         private int Car_ID;
         private int TestType_ID;
+        private Date dReservationDay;
         private String dStartTime;
         private String dEndTime;
         private int BillStatus;
@@ -64,6 +64,24 @@ public class GetBillListModel
         private int Car_SortNo;
         private String User_Name;
         private String User_Phone;
+
+        public Date getdReservationDay() {
+            return dReservationDay;
+        }
+
+        public void setdReservationDay(Date dReservationDay) {
+            this.dReservationDay = dReservationDay;
+        }
+
+        private int OutTime;
+
+        public int getOutTime() {
+            return OutTime;
+        }
+
+        public void setOutTime(int outTime) {
+            OutTime = outTime;
+        }
 
         public int getCar_ID() {
             return Car_ID;
@@ -109,7 +127,7 @@ public class GetBillListModel
             return cMemo;
         }
 
-        public void setCMemo(Object cMemo) {
+        public void setCMemo(Date cMemo) {
             this.cMemo = cMemo;
         }
 
