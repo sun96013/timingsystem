@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -38,6 +39,7 @@ public class TimingActivity extends Activity {
     Button btnEnter, btnExit;
     com.handmark.pulltorefresh.library.PullToRefreshListView listView;
     int refreshListIndex = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +84,7 @@ public class TimingActivity extends Activity {
 
         InitData();
         hideBottomUIMenu();
-
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         handler.postDelayed(runnable, 1000);
     }
 
