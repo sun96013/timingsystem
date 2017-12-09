@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.PowerManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -18,11 +17,13 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.ivan.timingsystem.model.GetBillListModel;
 import com.ivan.timingsystem.model.NomalModel;
 import com.ivan.timingsystem.util.HttpUtil;
@@ -35,7 +36,7 @@ import java.util.List;
 
 public class TimingActivity extends Activity {
 
-    TextView etPhone, tvTime;
+    TextView etPhone, tvTime,tvTotlePeople,tvNowIn;
     Button btnEnter, btnExit;
     com.handmark.pulltorefresh.library.PullToRefreshListView listView;
     int refreshListIndex = 0;
@@ -49,6 +50,8 @@ public class TimingActivity extends Activity {
 
         setContentView(R.layout.activity_timing);
         tvTime = (TextView) findViewById(R.id.tvTime);
+        tvTotlePeople = (TextView) findViewById(R.id.tvTotlePeople);
+        tvNowIn = (TextView) findViewById(R.id.tvNowIn);
         etPhone = (TextView) findViewById(R.id.etPhone);
         btnEnter = (Button) findViewById(R.id.btnEnter);
         btnExit = (Button) findViewById(R.id.btnExit);
@@ -81,6 +84,18 @@ public class TimingActivity extends Activity {
 //                Toast.makeText(TimingActivity.this," BillNo: "+BillNo,Toast.LENGTH_LONG).show();
             }
         });
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                InitData();
+                listView.onRefreshComplete();
+            }
+        });
 
         InitData();
         hideBottomUIMenu();
@@ -92,10 +107,9 @@ public class TimingActivity extends Activity {
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            if(refreshListIndex==60)
-            {
+            if (refreshListIndex == 60) {
                 InitData();
-                refreshListIndex=0;
+                refreshListIndex = 0;
             }
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");//可以方便地修改日期格式
 
@@ -127,17 +141,17 @@ public class TimingActivity extends Activity {
         HttpUtil hutil = new HttpUtil();
         HashMap<String, String> map = new HashMap<String, String>();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date now = null;
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        Date now = null;
+//
+//
+//        now = new Date();
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");//可以方便地修改日期格式
 
 
-        now = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");//可以方便地修改日期格式
-
-
-        String strnow = dateFormat.format(now);
-//        map.put("dDate",strnow);
-        map.put("dDate", "2017-10-30 09:00:00");
+//        String strnow = dateFormat.format(now);
+//        map.put("dDate", strnow);
+//        map.put("dDate", "2017-10-30 09:00:00");
         hutil.requestAsyn("GetBillList", HttpUtil.TYPE_GET, map, new HttpUtil.ReqCallBack<Object>() {
             @Override
             public void onReqSuccess(Object result) {
@@ -152,6 +166,46 @@ public class TimingActivity extends Activity {
                         @Override
                         public void run() {
                             listView.setAdapter(new PullToRefreshListViewAdapter(TimingActivity.this, model.getResult()));
+                        }
+                    });
+
+//                   for (GetBillListModel.ResultBean bean:model.getResult()) {
+//                       Log.d("onReqSuccess",bean.getBillCode());
+//                   }
+                }
+                //    Log.d("onReqSuccess",result.toString());
+            }
+
+            @Override
+            public void onReqFailed(String errorMsg) {
+
+            }
+        });
+
+
+
+
+
+        HttpUtil hutil1 = new HttpUtil();
+        HashMap<String, String> map1 = new HashMap<String, String>();
+
+        hutil1.requestAsyn("GetBillCount", HttpUtil.TYPE_GET, map1, new HttpUtil.ReqCallBack<Object>() {
+            @Override
+            public void onReqSuccess(Object result) {
+                //  Gson gson = new Gson();
+                Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+
+
+                final NomalModel model = gson.fromJson(result.toString(), NomalModel.class);
+                if (model.getResultStatus().equals("Success")) {
+                    Log.d("onReqSuccess", "Success");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                           String[] strarray= model.getResult().toString().split(",");
+                            tvTotlePeople.setText(strarray[0]+"人");
+                            tvNowIn.setText(strarray[1]+"人");
+                         //   listView.setAdapter(new PullToRefreshListViewAdapter(TimingActivity.this, model.getResult()));
                         }
                     });
 
@@ -188,11 +242,13 @@ public class TimingActivity extends Activity {
                             public void onReqSuccess(Object result) {
                                 Gson gson = new Gson();
                                 NomalModel model = gson.fromJson(result.toString(), NomalModel.class);
-                                Toast.makeText(TimingActivity.this, model.getResult(), Toast.LENGTH_SHORT).show();
+                              //  Toast.makeText(TimingActivity.this, model.getResult(), Toast.LENGTH_SHORT).show();
                                 if (model.getResultStatus().equals("Success")) {
                                     etPhone.setText("");
+                                    InitData();
+                                } else {
+                                    Toast.makeText(TimingActivity.this, model.getResult().toString(), Toast.LENGTH_SHORT).show();
                                 }
-//
                             }
 
                             @Override
@@ -221,14 +277,18 @@ public class TimingActivity extends Activity {
                         HashMap<String, String> map = new HashMap();
 
                         map.put("BillNo", etPhone.getText().toString());
-                        hutil.requestAsyn("UpdateBillUseing", HttpUtil.TYPE_GET, map, new HttpUtil.ReqCallBack<Object>() {
+                        hutil.requestAsyn("UpdateBillUseEnd", HttpUtil.TYPE_GET, map, new HttpUtil.ReqCallBack<Object>() {
                             @Override
                             public void onReqSuccess(Object result) {
                                 Gson gson = new Gson();
                                 NomalModel model = gson.fromJson(result.toString(), NomalModel.class);
-                                Toast.makeText(TimingActivity.this, model.getResult(), Toast.LENGTH_SHORT).show();
+
                                 if (model.getResultStatus().equals("Success")) {
                                     etPhone.setText("");
+                                    InitData();
+
+                                } else {
+                                    Toast.makeText(TimingActivity.this, model.getResult().toString(), Toast.LENGTH_SHORT).show();
                                 }
                             }
 
@@ -310,9 +370,9 @@ public class TimingActivity extends Activity {
             long end = calendar.getTimeInMillis();
             Calendar startcalendar = Calendar.getInstance();
             long begin = startcalendar.getTimeInMillis();
-            long min = (begin - end) / (1000 * 3600);
+            long min = (begin - end) / (1000 * 60);
             if (min > 0) {
-                viewHolder.tvOvertime.setText((int) min + "分钟");
+                viewHolder.tvOvertime.setText((int) min + "");
             } else {
                 viewHolder.tvOvertime.setText("0");
             }

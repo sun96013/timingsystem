@@ -12,7 +12,7 @@ public class NomalModel {
      */
 
     private String ResultStatus;
-    private String Result;
+    private Object Result;
 
     public String getResultStatus() {
         return ResultStatus;
@@ -22,11 +22,11 @@ public class NomalModel {
         this.ResultStatus = ResultStatus;
     }
 
-    public String getResult() {
+    public Object getResult() {
         return Result;
     }
 
-    public void setResult(String Result) {
+    public void setResult(Object Result) {
         this.Result = Result;
     }
 }

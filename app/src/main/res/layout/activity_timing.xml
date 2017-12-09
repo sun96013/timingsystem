@@ -237,7 +237,7 @@
                     android:layout_margin="10dp"
                     android:background="#68686A"
                     android:gravity="center_vertical|center_horizontal"
-                    android:hint="请输入手机号"
+                    android:hint="请输入订单号"
                     android:padding="20dp"
                     android:textAlignment="center"
                     android:textColor="@android:color/background_light"
