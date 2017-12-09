@@ -68,13 +68,13 @@ MERGED from [com.android.support:support-compat:25.1.0] C:\Users\Administrator\.
 	android:label
 		ADDED from C:\Users\Administrator\AndroidStudioProjects\timingsystem\app\src\main\AndroidManifest.xml:8:9-41
 	android:roundIcon
-		ADDED from C:\Users\Administrator\AndroidStudioProjects\timingsystem\app\src\main\AndroidManifest.xml:9:9-54
+		ADDED from C:\Users\Administrator\AndroidStudioProjects\timingsystem\app\src\main\AndroidManifest.xml:9:9-43
 	android:icon
 		ADDED from C:\Users\Administrator\AndroidStudioProjects\timingsystem\app\src\main\AndroidManifest.xml:7:9-43
 	android:allowBackup
 		ADDED from C:\Users\Administrator\AndroidStudioProjects\timingsystem\app\src\main\AndroidManifest.xml:6:9-35
 	android:theme
-		ADDED from C:\Users\Administrator\AndroidStudioProjects\timingsystem\app\src\main\AndroidManifest.xml:11:9-40
+		ADDED from C:\Users\Administrator\AndroidStudioProjects\timingsystem\app\src\main\AndroidManifest.xml:11:9-73
 activity#com.ivan.timingsystem.MainActivity
 ADDED from C:\Users\Administrator\AndroidStudioProjects\timingsystem\app\src\main\AndroidManifest.xml:12:9-18:20
 	android:name
