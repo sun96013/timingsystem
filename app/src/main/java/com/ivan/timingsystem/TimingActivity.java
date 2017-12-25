@@ -30,17 +30,16 @@ import com.ivan.timingsystem.util.HttpUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 public class TimingActivity extends Activity {
 
-    TextView etPhone, tvTime,tvTotlePeople,tvNowIn;
+    TextView etPhone, tvTime, tvTotlePeople, tvNowIn;
     Button btnEnter, btnExit;
     com.handmark.pulltorefresh.library.PullToRefreshListView listView;
     int refreshListIndex = 0;
-
+    GetBillListModel model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,14 +71,27 @@ public class TimingActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 TextView temptvCardNo = (TextView) view.findViewById(R.id.tvCarNo);
-                String BillNo = temptvCardNo.getTag().toString();
 
-//              	new AlertDialog.Builder(TimingActivity.this)
-//            .setTitle("您要选择的是").
-//             setMultiChoiceItems(new String[] {"选项1","选项2"}, null, null)
-//          	.setPositiveButton("确定", null)
-//               .setNegativeButton("取消", null)
-//              	.show();
+                String BillNo = temptvCardNo.getTag().toString();
+                TextView tv = new TextView(TimingActivity.this);
+                GetBillListModel.ResultBean bean = model.getResult().get(i-1);
+                StringBuilder sb = new StringBuilder();
+                sb.append("预约人："+bean.getUser_Name() + "\n\r");
+                sb.append("订单号："+bean.getBillCode() + "\n\r");
+                sb.append("订单金额："+bean.getIAppMon() + "\n\r");
+                sb.append("车牌："+bean.getCar_Brand() + "\n\r");
+                sb.append("手机号："+bean.getUser_Phone() + "\n\r");
+//                sb.append(bean.getUser_Name() + "\n\r");
+//                sb.append(bean.getUser_Name() + "\n\r");
+
+
+                tv.setText(sb.toString());
+                tv.setTextSize(30);
+                new AlertDialog.Builder(TimingActivity.this)
+                        .setTitle("详情").setView(tv)
+                        .setPositiveButton("确定", null)
+
+                        .show();
 //                Log.d("tag",BillNo);
 //                Toast.makeText(TimingActivity.this," BillNo: "+BillNo,Toast.LENGTH_LONG).show();
             }
@@ -87,7 +99,8 @@ public class TimingActivity extends Activity {
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-
+                InitData();
+                listView.onRefreshComplete();
             }
 
             @Override
@@ -159,7 +172,7 @@ public class TimingActivity extends Activity {
                 Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
 
 
-                final GetBillListModel model = gson.fromJson(result.toString(), GetBillListModel.class);
+                model = gson.fromJson(result.toString(), GetBillListModel.class);
                 if (model.getResultStatus().equals("Success")) {
                     Log.d("onReqSuccess", "Success");
                     runOnUiThread(new Runnable() {
@@ -183,9 +196,6 @@ public class TimingActivity extends Activity {
         });
 
 
-
-
-
         HttpUtil hutil1 = new HttpUtil();
         HashMap<String, String> map1 = new HashMap<String, String>();
 
@@ -202,10 +212,10 @@ public class TimingActivity extends Activity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                           String[] strarray= model.getResult().toString().split(",");
-                            tvTotlePeople.setText(strarray[0]+"人");
-                            tvNowIn.setText(strarray[1]+"人");
-                         //   listView.setAdapter(new PullToRefreshListViewAdapter(TimingActivity.this, model.getResult()));
+                            String[] strarray = model.getResult().toString().split(",");
+                            tvTotlePeople.setText(strarray[0] + "人");
+                            tvNowIn.setText(strarray[1] + "人");
+                            //   listView.setAdapter(new PullToRefreshListViewAdapter(TimingActivity.this, model.getResult()));
                         }
                     });
 
@@ -242,7 +252,7 @@ public class TimingActivity extends Activity {
                             public void onReqSuccess(Object result) {
                                 Gson gson = new Gson();
                                 NomalModel model = gson.fromJson(result.toString(), NomalModel.class);
-                              //  Toast.makeText(TimingActivity.this, model.getResult(), Toast.LENGTH_SHORT).show();
+                                //  Toast.makeText(TimingActivity.this, model.getResult(), Toast.LENGTH_SHORT).show();
                                 if (model.getResultStatus().equals("Success")) {
                                     etPhone.setText("");
                                     InitData();
@@ -345,7 +355,7 @@ public class TimingActivity extends Activity {
 
                 viewHolder = new ViewHolder();
                 viewHolder.tvCarNo = (TextView) convertView.findViewById(R.id.tvCarNo);
-                viewHolder.tvPhone = (TextView) convertView.findViewById(R.id.tvPhone);
+                viewHolder.tvRefName = (TextView) convertView.findViewById(R.id.tvRefName);
                 viewHolder.tvInTime = (TextView) convertView.findViewById(R.id.tvInTime);
                 viewHolder.tvOutTime = (TextView) convertView.findViewById(R.id.tvOutTime);
                 viewHolder.tvOvertime = (TextView) convertView.findViewById(R.id.tvOvertime);
@@ -359,7 +369,7 @@ public class TimingActivity extends Activity {
             //    Log.d("Timing",list.get(position).getCar_ID()+"");
             viewHolder.tvCarNo.setTag(list.get(position).getBillCode() + "");
             viewHolder.tvCarNo.setText(list.get(position).getCar_ID() + "");
-            viewHolder.tvPhone.setText(list.get(position).getUser_Phone() + "");
+            viewHolder.tvRefName.setText(list.get(position).getUser_Name() + "");
             viewHolder.tvInTime.setText(list.get(position).getDStartTime());
             viewHolder.tvOutTime.setText(list.get(position).getDEndTime());
             Calendar calendar = Calendar.getInstance();
@@ -385,7 +395,7 @@ public class TimingActivity extends Activity {
 
         class ViewHolder {
             TextView tvCarNo;
-            TextView tvPhone;
+            TextView tvRefName;
             TextView tvInTime;
             TextView tvOutTime;
             TextView tvOvertime;
