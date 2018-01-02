@@ -6,5 +6,5 @@ package com.ivan.timingsystem.util;
 
 public   class Config {
 
-    public  static  String Url="http://jinlong.ivantech.cn/api/Mobile/";
+    public  static  String Url="http://yuyue.jxsjlqcfwzx.com/api/Mobile/";
 }

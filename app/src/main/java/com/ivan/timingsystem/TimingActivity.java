@@ -30,6 +30,7 @@ import com.ivan.timingsystem.util.HttpUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -44,8 +45,7 @@ public class TimingActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);//隐藏标题栏
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//隐藏状态栏
+//
 
         setContentView(R.layout.activity_timing);
         tvTime = (TextView) findViewById(R.id.tvTime);
@@ -76,13 +76,15 @@ public class TimingActivity extends Activity {
                 TextView tv = new TextView(TimingActivity.this);
                 GetBillListModel.ResultBean bean = model.getResult().get(i-1);
                 StringBuilder sb = new StringBuilder();
+
                 sb.append("\n\r"+"预约人："+bean.getUser_Name() + "\n\r");
-                sb.append("订单号："+bean.getBillCode() + "\n\r");
-                sb.append("订单金额："+bean.getIAppMon() + "\n\r");
+                sb.append("教练："+bean.getCoachUserName() + "\n\r");
                 sb.append("车牌："+bean.getCar_Brand() + "\n\r");
                 sb.append("手机号："+bean.getUser_Phone() + "\n\r");
-//                sb.append(bean.getUser_Name() + "\n\r");
-//                sb.append(bean.getUser_Name() + "\n\r");
+                sb.append("入场时间："+dateToString(bean.getDInTime()) + "\n\r");
+                sb.append("练车人数："+bean.getIPracticeNum() + "\n\r");
+                sb.append("订单号："+bean.getBillCode() + "\n\r");
+                sb.append("订单金额："+bean.getITotalMon() + "\n\r");
 
 
                 tv.setText(sb.toString());
@@ -111,8 +113,7 @@ public class TimingActivity extends Activity {
         });
 
         InitData();
-        hideBottomUIMenu();
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//        toggleHideyBar();
         handler.postDelayed(runnable, 1000);
     }
 
@@ -276,7 +277,7 @@ public class TimingActivity extends Activity {
 
 
     public void ExitFunciton() {
-        new AlertDialog.Builder(TimingActivity.this)
+        new AlertDialog.Builder(getWindow().getContext())
                 .setTitle("确认")
                 .setMessage("确定退场吗？")
                 .setPositiveButton("是", new DialogInterface.OnClickListener() {
@@ -369,12 +370,12 @@ public class TimingActivity extends Activity {
             //    Log.d("Timing",list.get(position).getCar_ID()+"");
             viewHolder.tvCarNo.setTag(list.get(position).getBillCode() + "");
             viewHolder.tvCarNo.setText(list.get(position).getCar_ID() + "");
-            viewHolder.tvRefName.setText(list.get(position).getUser_Name() + "");
+            viewHolder.tvRefName.setText(list.get(position).getCoachUserName() + "");
             viewHolder.tvInTime.setText(list.get(position).getDStartTime());
             viewHolder.tvOutTime.setText(list.get(position).getDEndTime());
             Calendar calendar = Calendar.getInstance();
             String hour = list.get(position).getDEndTime().replace(":00", "");
-            calendar.setTime(list.get(position).getdReservationDay());
+            calendar.setTime(list.get(position).getDReservationDay());
             int inthour = Integer.parseInt(hour);
             calendar.set(Calendar.HOUR_OF_DAY, inthour);
             long end = calendar.getTimeInMillis();
@@ -435,23 +436,62 @@ public class TimingActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        hideBottomUIMenu();
+
     }
 
-    /**
-     * 隐藏虚拟按键，并且全屏
-     */
-    protected void hideBottomUIMenu() {
-        //隐藏虚拟按键，并且全屏
-        if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower api
-            View v = this.getWindow().getDecorView();
-            v.setSystemUiVisibility(View.GONE);
-        } else if (Build.VERSION.SDK_INT >= 19) {
-            //for new api versions.
-            View decorView = getWindow().getDecorView();
-            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN;
-            decorView.setSystemUiVisibility(uiOptions);
-        }
+
+    public static String dateToString(Date time){
+        SimpleDateFormat formatter;
+        formatter = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
+        String ctime = formatter.format(time);
+
+        return ctime;
     }
+
+
+
+    public void toggleHideyBar() {
+
+        // BEGIN_INCLUDE (get_current_ui_flags)
+        // The UI options currently enabled are represented by a bitfield.
+        // getSystemUiVisibility() gives us that bitfield.
+        int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
+        int newUiOptions = uiOptions;
+        // END_INCLUDE (get_current_ui_flags)
+        // BEGIN_INCLUDE (toggle_ui_flags)
+        boolean isImmersiveModeEnabled =
+                ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
+        if (isImmersiveModeEnabled) {
+            Log.i("123", "Turning immersive mode mode off. ");
+        } else {
+            Log.i("123", "Turning immersive mode mode on.");
+        }
+
+        // Navigation bar hiding:  Backwards compatible to ICS.
+        if (Build.VERSION.SDK_INT >= 14) {
+            newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        }
+
+        // Status bar hiding: Backwards compatible to Jellybean
+        if (Build.VERSION.SDK_INT >= 16) {
+            newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
+        }
+
+        // Immersive mode: Backward compatible to KitKat.
+        // Note that this flag doesn't do anything by itself, it only augments the behavior
+        // of HIDE_NAVIGATION and FLAG_FULLSCREEN.  For the purposes of this sample
+        // all three flags are being toggled together.
+        // Note that there are two immersive mode UI flags, one of which is referred to as "sticky".
+        // Sticky immersive mode differs in that it makes the navigation and status bars
+        // semi-transparent, and the UI flag does not get cleared when the user interacts with
+        // the screen.
+        if (Build.VERSION.SDK_INT >= 18) {
+            newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        }
+
+//       getWindow().getDecorView().setSystemUiVisibility(newUiOptions);//上边状态栏和底部状态栏滑动都可以调出状态栏
+        getWindow().getDecorView().setSystemUiVisibility(4108);//这里的4108可防止从底部滑动调出底部导航栏
+        //END_INCLUDE (set_ui_flags)
+    }
+
 }
