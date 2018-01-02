@@ -13,13 +13,13 @@
         android:text="序号"
         android:textSize="18sp"  android:layout_weight="1"/>
     <TextView
-        android:id="@+id/tvPhone"
+        android:id="@+id/tvRefName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
         android:gravity="center_vertical|center_horizontal"
         android:padding="10dp"
-        android:text="手机号码"
+        android:text="教练"
         android:textSize="18sp" android:layout_weight="1"/>
     <TextView
         android:id="@+id/tvInTime"

@@ -59,7 +59,7 @@ public class GetBillListModel {
         private String BillCode;
         private int iAppTimeNum;
         private int MakeUserID;
-        private int iAppMon;
+        private float iAppMon;
         private String Car_Brand;
         private int Car_SortNo;
         private String User_Name;
@@ -155,11 +155,11 @@ public class GetBillListModel {
             this.MakeUserID = MakeUserID;
         }
 
-        public int getIAppMon() {
+        public float getIAppMon() {
             return iAppMon;
         }
 
-        public void setIAppMon(int iAppMon) {
+        public void setIAppMon(float iAppMon) {
             this.iAppMon = iAppMon;
         }
 
