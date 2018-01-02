@@ -76,7 +76,7 @@ public class TimingActivity extends Activity {
                 TextView tv = new TextView(TimingActivity.this);
                 GetBillListModel.ResultBean bean = model.getResult().get(i-1);
                 StringBuilder sb = new StringBuilder();
-                sb.append("预约人："+bean.getUser_Name() + "\n\r");
+                sb.append("\n\r"+"预约人："+bean.getUser_Name() + "\n\r");
                 sb.append("订单号："+bean.getBillCode() + "\n\r");
                 sb.append("订单金额："+bean.getIAppMon() + "\n\r");
                 sb.append("车牌："+bean.getCar_Brand() + "\n\r");
