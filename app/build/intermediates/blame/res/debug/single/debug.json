@@ -1812,6 +1812,10 @@
         "source": "C:\\Users\\Administrator\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-25.1.0.aar\\90e18016c9d4cab15319bc1860470c76\\res\\drawable\\abc_item_background_holo_light.xml"
     },
     {
+        "merged": "C:\\Users\\Administrator\\AndroidStudioProjects\\timingsystem\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v24_icon.png.flat",
+        "source": "C:\\Users\\Administrator\\AndroidStudioProjects\\timingsystem\\app\\src\\main\\res\\drawable-v24\\icon.png"
+    },
+    {
         "merged": "C:\\Users\\Administrator\\AndroidStudioProjects\\timingsystem\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_notification_bg_normal.9.png.flat",
         "source": "C:\\Users\\Administrator\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-25.1.0.aar\\90e18016c9d4cab15319bc1860470c76\\res\\drawable-xhdpi-v4\\notification_bg_normal.9.png"
     },
