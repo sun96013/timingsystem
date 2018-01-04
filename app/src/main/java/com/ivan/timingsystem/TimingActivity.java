@@ -78,9 +78,11 @@ public class TimingActivity extends Activity {
                 StringBuilder sb = new StringBuilder();
 
                 sb.append("\n\r"+"预约人："+bean.getUser_Name() + "\n\r");
+                sb.append("驾校："+bean.getDrivSch_Name() + "\n\r");
                 sb.append("教练："+bean.getCoachUserName() + "\n\r");
                 sb.append("车牌："+bean.getCar_Brand() + "\n\r");
                 sb.append("手机号："+bean.getUser_Phone() + "\n\r");
+                sb.append("预约时间："+bean.getDStartTime()+"-"+bean.getDEndTime() + "\n\r");
                 sb.append("入场时间："+dateToString(bean.getDInTime()) + "\n\r");
                 sb.append("练车人数："+bean.getIPracticeNum() + "\n\r");
                 sb.append("订单号："+bean.getBillCode() + "\n\r");
@@ -356,6 +358,7 @@ public class TimingActivity extends Activity {
 
                 viewHolder = new ViewHolder();
                 viewHolder.tvCarNo = (TextView) convertView.findViewById(R.id.tvCarNo);
+                viewHolder.tvRefSchoolName = (TextView) convertView.findViewById(R.id.tvRefSchoolName);
                 viewHolder.tvRefName = (TextView) convertView.findViewById(R.id.tvRefName);
                 viewHolder.tvInTime = (TextView) convertView.findViewById(R.id.tvInTime);
                 viewHolder.tvOutTime = (TextView) convertView.findViewById(R.id.tvOutTime);
@@ -370,6 +373,7 @@ public class TimingActivity extends Activity {
             //    Log.d("Timing",list.get(position).getCar_ID()+"");
             viewHolder.tvCarNo.setTag(list.get(position).getBillCode() + "");
             viewHolder.tvCarNo.setText(list.get(position).getCar_ID() + "");
+            viewHolder.tvRefSchoolName.setText(list.get(position).getDrivSch_Name() + "");
             viewHolder.tvRefName.setText(list.get(position).getCoachUserName() + "");
             viewHolder.tvInTime.setText(list.get(position).getDStartTime());
             viewHolder.tvOutTime.setText(list.get(position).getDEndTime());
@@ -396,6 +400,7 @@ public class TimingActivity extends Activity {
 
         class ViewHolder {
             TextView tvCarNo;
+            TextView tvRefSchoolName;
             TextView tvRefName;
             TextView tvInTime;
             TextView tvOutTime;

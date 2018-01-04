@@ -99,6 +99,16 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical|center_horizontal"
                         android:padding="10dp"
+                        android:text="驾校"
+                        android:textSize="18sp" />
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:padding="10dp"
                         android:text="教练"
                         android:textSize="18sp" />
 
@@ -110,7 +120,7 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical|center_horizontal"
                         android:padding="10dp"
-                        android:text="入场时间"
+                        android:text="预约入场"
                         android:textSize="18sp" />
 
                     <TextView
@@ -121,8 +131,9 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical|center_horizontal"
                         android:padding="10dp"
-                        android:text="退场时间"
+                        android:text="预约退场"
                         android:textSize="18sp" />
+
 
                     <TextView
 
