@@ -377,15 +377,27 @@ public class TimingActivity extends Activity {
             viewHolder.tvRefName.setText(list.get(position).getCoachUserName() + "");
             viewHolder.tvInTime.setText(list.get(position).getDStartTime());
             viewHolder.tvOutTime.setText(list.get(position).getDEndTime());
-            Calendar calendar = Calendar.getInstance();
-            String hour = list.get(position).getDEndTime().replace(":00", "");
-            calendar.setTime(list.get(position).getDReservationDay());
-            int inthour = Integer.parseInt(hour);
-            calendar.set(Calendar.HOUR_OF_DAY, inthour);
-            long end = calendar.getTimeInMillis();
+            //实际开始时间
             Calendar startcalendar = Calendar.getInstance();
+            startcalendar.setTime(list.get(position).getDInTime());
             long begin = startcalendar.getTimeInMillis();
-            long min = (begin - end) / (1000 * 60);
+            //预计结束时间
+            Calendar endcalendar = Calendar.getInstance();
+            endcalendar.setTime(list.get(position).getDReservationDay());
+            int orderhour = list.get(position).getIAppTimeNum();
+            endcalendar.add(Calendar.HOUR_OF_DAY, orderhour);
+            long end = endcalendar.getTimeInMillis();
+
+            //当前时间
+            Calendar currentcalendar = Calendar.getInstance();
+            long current = currentcalendar.getTimeInMillis();
+
+//            endcalendar.setTime(list.get(position).getDReservationDay());
+//          //  int inthour = Integer.parseInt(hour);
+//            endcalendar.set(Calendar.HOUR_OF_DAY, inthour);
+//            long end = endcalendar.getTimeInMillis();
+
+            long min = (current - begin) / (1000 * 60);
             if (min > 0) {
                 viewHolder.tvOvertime.setText((int) min + "");
             } else {
