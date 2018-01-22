@@ -5,58 +5,58 @@
 
     <TextView
         android:id="@+id/tvCarNo"
-        android:layout_width="wrap_content"
+        android:layout_width="50px"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
         android:gravity="center_vertical|center_horizontal"
         android:padding="10dp"
         android:text="序号"
-        android:textSize="18sp"  android:layout_weight="1"/>
+        android:textSize="18sp"  />
     <TextView
         android:id="@+id/tvRefSchoolName"
-        android:layout_width="wrap_content"
+        android:layout_width="120px"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
         android:gravity="center_vertical|center_horizontal"
         android:padding="10dp"
         android:text="驾校"
-        android:textSize="18sp" android:layout_weight="1"/>
+        android:textSize="18sp" />
     <TextView
         android:id="@+id/tvRefName"
-        android:layout_width="wrap_content"
+        android:layout_width="100px"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
         android:gravity="center_vertical|center_horizontal"
         android:padding="10dp"
         android:text="教练"
-        android:textSize="18sp" android:layout_weight="1"/>
+        android:textSize="18sp" />
     <TextView
         android:id="@+id/tvInTime"
-        android:layout_width="wrap_content"
+        android:layout_width="120px"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
         android:gravity="center_vertical|center_horizontal"
         android:padding="10dp"
         android:text="入场时间"
-        android:textSize="18sp" android:layout_weight="1"/>
+        android:textSize="18sp" />
     <TextView
         android:id="@+id/tvOutTime"
-        android:layout_width="wrap_content"
+        android:layout_width="120px"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
         android:gravity="center_vertical|center_horizontal"
         android:padding="10dp"
         android:text="退场时间"
-        android:textSize="18sp" android:layout_weight="1"/>
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tvOvertime"
-        android:layout_width="wrap_content"
+        android:layout_width="100px"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
         android:gravity="center_vertical|center_horizontal"
         android:padding="10dp"
         android:text="超时"
-        android:textSize="18sp" android:layout_weight="1"/>
+        android:textSize="18sp" />
 
 </LinearLayout>
