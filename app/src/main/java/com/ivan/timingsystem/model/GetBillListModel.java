@@ -87,6 +87,25 @@ public class GetBillListModel {
         private String DrivSch_Name;
         private String BillStatusType;
         private String OverType;
+        private long  iOverMINUTE;
+        private Date  dPreEndTime;
+
+        public long getiOverMINUTE() {
+            return iOverMINUTE;
+        }
+
+        public void setiOverMINUTE(long iOverMINUTE) {
+            this.iOverMINUTE = iOverMINUTE;
+        }
+
+        public Date getdPreEndTime() {
+            return dPreEndTime;
+        }
+
+        public void setdPreEndTime(Date dPreEndTime) {
+            this.dPreEndTime = dPreEndTime;
+        }
+
         public void setID(int ID) {
             this.ID = ID;
         }

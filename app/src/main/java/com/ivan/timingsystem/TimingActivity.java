@@ -375,37 +375,41 @@ public class TimingActivity extends Activity {
             viewHolder.tvCarNo.setText(list.get(position).getCar_ID() + "");
             viewHolder.tvRefSchoolName.setText(list.get(position).getDrivSch_Name() + "");
             viewHolder.tvRefName.setText(list.get(position).getCoachUserName() + "");
-            viewHolder.tvInTime.setText(list.get(position).getDStartTime());
-            viewHolder.tvOutTime.setText(list.get(position).getDEndTime());
-            //实际开始时间
-            Calendar startcalendar = Calendar.getInstance();
-            startcalendar.setTime(list.get(position).getDInTime());
-            long begin = startcalendar.getTimeInMillis();
-            //预计结束时间
-            Calendar endcalendar = Calendar.getInstance();
-            endcalendar.setTime(list.get(position).getDReservationDay());
-            int orderhour = list.get(position).getIAppTimeNum();
-            endcalendar.add(Calendar.HOUR_OF_DAY, orderhour);
-            long end = endcalendar.getTimeInMillis();
-
-            //当前时间
-            Calendar currentcalendar = Calendar.getInstance();
-            long current = currentcalendar.getTimeInMillis();
-
+            viewHolder.tvInTime.setText(dateToString(list.get(position).getDInTime()));
+            viewHolder.tvOutTime.setText(dateToString(list.get(position).getdPreEndTime()));
+//            //实际开始时间
+//            Calendar startcalendar = Calendar.getInstance();
+//            startcalendar.setTime(list.get(position).getDInTime());
+//            long begin = startcalendar.getTimeInMillis();
+//            //预计结束时间
+//            Calendar endcalendar = Calendar.getInstance();
 //            endcalendar.setTime(list.get(position).getDReservationDay());
-//          //  int inthour = Integer.parseInt(hour);
-//            endcalendar.set(Calendar.HOUR_OF_DAY, inthour);
+//            int orderhour = list.get(position).getIAppTimeNum();
+//            endcalendar.add(Calendar.HOUR_OF_DAY, orderhour);
 //            long end = endcalendar.getTimeInMillis();
-
-            long min = (current - begin) / (1000 * 60);
-            if (min > 0) {
-                viewHolder.tvOvertime.setText((int) min + "");
+//
+//            //当前时间
+//            Calendar currentcalendar = Calendar.getInstance();
+//            long current = currentcalendar.getTimeInMillis();
+//
+////            endcalendar.setTime(list.get(position).getDReservationDay());
+////          //  int inthour = Integer.parseInt(hour);
+////            endcalendar.set(Calendar.HOUR_OF_DAY, inthour);
+////            long end = endcalendar.getTimeInMillis();
+//
+//            long min = (current - begin) / (1000 * 60);
+//            if (min > 0) {
+//                viewHolder.tvOvertime.setText((int) min + "");
+//            } else {
+//                viewHolder.tvOvertime.setText("0");
+//            }
+////            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+////            String dateStr = sdf.format(calendar.getTime());
+            if (list.get(position).getiOverMINUTE() > 0) {
+                viewHolder.tvOvertime.setText(list.get(position).getiOverMINUTE()+"");
             } else {
                 viewHolder.tvOvertime.setText("0");
             }
-//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-//            String dateStr = sdf.format(calendar.getTime());
-
 
             return convertView;
         }
