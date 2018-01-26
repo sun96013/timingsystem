@@ -12,8 +12,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -29,7 +27,6 @@ import com.ivan.timingsystem.model.NomalModel;
 import com.ivan.timingsystem.util.HttpUtil;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -245,49 +242,145 @@ public class TimingActivity extends Activity {
         });
     }
 
+
     public void EnterFunciton() {
 
         if (etPhone.getText().equals("")) {
             Toast.makeText(TimingActivity.this, "请输入订单号", Toast.LENGTH_LONG).show();
         } else {
-            new AlertDialog.Builder(TimingActivity.this)
-                    .setTitle("确认")
-                    .setMessage("确定入场吗？")
-                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
+
+            HttpUtil hutil1 = new HttpUtil();
+            HashMap<String, String> map1 = new HashMap<String, String>();
+            map1.put("BillNo",etPhone.getText()+"");
+            hutil1.requestAsyn("GetBillInfo", HttpUtil.TYPE_GET, map1, new HttpUtil.ReqCallBack<Object>() {
+                @Override
+                public void onReqSuccess(Object result) {
+                    //  Gson gson = new Gson();
+                    Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+                    final NomalModel model = gson.fromJson(result.toString(), NomalModel.class);
+                    if (model.getResultStatus().equals("Success")) {
+                        final GetBillListModel.ResultBean bean = gson.fromJson(result.toString(), GetBillListModel.ResultBean.class);
+                        Log.d("onReqSuccess", result.toString());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                TextView tv = new TextView(TimingActivity.this);
+                                StringBuilder sb = new StringBuilder();
+
+                                sb.append("\n\r" + "预约人：" + bean.getUser_Name() + "\n\r");
+                                sb.append("驾校：" + bean.getDrivSch_Name() + "\n\r");
+                                sb.append("教练：" + bean.getCoachUserName() + "\n\r");
+                                sb.append("车牌：" + bean.getCar_Brand() + "\n\r");
+                                sb.append("手机号：" + bean.getUser_Phone() + "\n\r");
+                                sb.append("预约时间：" + bean.getDStartTime() + "-" + bean.getDEndTime() + "\n\r");
+                              //  sb.append("入场时间：" + dateToString(bean.getDInTime()) + "\n\r");
+                                sb.append("练车人数：" + bean.getIPracticeNum() + "\n\r");
+                                sb.append("订单号：" + bean.getBillCode() + "\n\r");
+                                sb.append("订单金额：" + bean.getITotalMon() + "\n\r");
 
 
-                            HttpUtil hutil = new HttpUtil();
-                            HashMap<String, String> map = new HashMap();
-
-                            map.put("BillNo", etPhone.getText().toString());
-                            hutil.requestAsyn("UpdateBillUseing", HttpUtil.TYPE_GET, map, new HttpUtil.ReqCallBack<Object>() {
-                                @Override
-                                public void onReqSuccess(Object result) {
-                                    Gson gson = new Gson();
-                                    NomalModel model = gson.fromJson(result.toString(), NomalModel.class);
-                                    //  Toast.makeText(TimingActivity.this, model.getResult(), Toast.LENGTH_SHORT).show();
-                                    if (model.getResultStatus().equals("Success")) {
-                                        etPhone.setText("");
-                                        InitData();
-                                        Toast.makeText(TimingActivity.this, "入场成功", Toast.LENGTH_LONG).show();
-                                    } else {
-                                        Toast.makeText(TimingActivity.this, model.getResult().toString(), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-
-                                @Override
-                                public void onReqFailed(String errorMsg) {
-
-                                }
-                            });
+                                tv.setText(sb.toString());
+                                tv.setTextSize(30);
+                                new AlertDialog.Builder(TimingActivity.this)
+                                        .setTitle("确认入场吗？").setView(tv)
+                                        .setPositiveButton("确定",  new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
 
 
-                        }
-                    })
-                    .setNegativeButton("否", null)
-                    .show();
+                                                HttpUtil hutil = new HttpUtil();
+                                                HashMap<String, String> map = new HashMap();
+
+                                                map.put("BillNo", etPhone.getText().toString());
+                                                hutil.requestAsyn("UpdateBillUseing", HttpUtil.TYPE_GET, map, new HttpUtil.ReqCallBack<Object>() {
+                                                    @Override
+                                                    public void onReqSuccess(Object result) {
+                                                        Gson gson = new Gson();
+                                                        NomalModel model = gson.fromJson(result.toString(), NomalModel.class);
+                                                        //  Toast.makeText(TimingActivity.this, model.getResult(), Toast.LENGTH_SHORT).show();
+                                                        if (model.getResultStatus().equals("Success")) {
+                                                            etPhone.setText("");
+                                                            InitData();
+                                                            Toast.makeText(TimingActivity.this, "入场成功", Toast.LENGTH_LONG).show();
+                                                        } else {
+                                                            Toast.makeText(TimingActivity.this, model.getResult().toString(), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onReqFailed(String errorMsg) {
+
+                                                    }
+                                                });
+
+
+                                            }
+                                        })
+                                        .setNegativeButton("否", null)
+                                        .show();
+
+//                                String[] strarray = model.getResult().toString().split(",");
+//                                tvTotlePeople.setText(strarray[0] + "人");
+//                                tvNowIn.setText(strarray[1] + "人");
+                                //   listView.setAdapter(new PullToRefreshListViewAdapter(TimingActivity.this, model.getResult()));
+                            }
+                        });
+
+                    }
+                    else
+                    {
+                        Toast.makeText(TimingActivity.this, model.getResult().toString(), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+                @Override
+                public void onReqFailed(String errorMsg) {
+
+                }
+            });
+
+
+
+
+//            new AlertDialog.Builder(TimingActivity.this)
+//                    .setTitle("确认")
+//                    .setMessage("确定入场吗？")
+//                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//
+//
+//                            HttpUtil hutil = new HttpUtil();
+//                            HashMap<String, String> map = new HashMap();
+//
+//                            map.put("BillNo", etPhone.getText().toString());
+//                            hutil.requestAsyn("UpdateBillUseing", HttpUtil.TYPE_GET, map, new HttpUtil.ReqCallBack<Object>() {
+//                                @Override
+//                                public void onReqSuccess(Object result) {
+//                                    Gson gson = new Gson();
+//                                    NomalModel model = gson.fromJson(result.toString(), NomalModel.class);
+//                                    //  Toast.makeText(TimingActivity.this, model.getResult(), Toast.LENGTH_SHORT).show();
+//                                    if (model.getResultStatus().equals("Success")) {
+//                                        etPhone.setText("");
+//                                        InitData();
+//                                        Toast.makeText(TimingActivity.this, "入场成功", Toast.LENGTH_LONG).show();
+//                                    } else {
+//                                        Toast.makeText(TimingActivity.this, model.getResult().toString(), Toast.LENGTH_SHORT).show();
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onReqFailed(String errorMsg) {
+//
+//                                }
+//                            });
+//
+//
+//                        }
+//                    })
+//                    .setNegativeButton("否", null)
+//                    .show();
 
         }
     }
