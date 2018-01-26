@@ -451,7 +451,7 @@
 
                         <Button
 
-                            android:id="@+id/btnNull"
+                            android:id="@+id/btnDel"
                             android:layout_width="160dp"
                             android:layout_height="105dp"
                             android:layout_column="2"
@@ -462,7 +462,7 @@
                             android:layout_rowWeight="1"
                             android:background="#FFFFFF"
                             android:onClick="KeyBoardClick"
-                            android:text="X"
+                            android:text="删除"
                             android:textAlignment="center"
                             android:textSize="24sp"
                             android:textStyle="bold" />

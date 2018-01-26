@@ -37,7 +37,7 @@ import java.util.List;
 public class TimingActivity extends Activity {
 
     TextView etPhone, tvTime, tvTotlePeople, tvNowIn;
-    Button btnEnter, btnExit;
+    Button btnEnter, btnExit, btnDel;
     com.handmark.pulltorefresh.library.PullToRefreshListView listView;
     int refreshListIndex = 0;
     GetBillListModel model;
@@ -54,6 +54,13 @@ public class TimingActivity extends Activity {
         etPhone = (TextView) findViewById(R.id.etPhone);
         btnEnter = (Button) findViewById(R.id.btnEnter);
         btnExit = (Button) findViewById(R.id.btnExit);
+//        btnDel=(Button)findViewById(R.id.btnDel);
+//        btnDel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
         btnEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,19 +81,19 @@ public class TimingActivity extends Activity {
 
                 String BillNo = temptvCardNo.getTag().toString();
                 TextView tv = new TextView(TimingActivity.this);
-                GetBillListModel.ResultBean bean = model.getResult().get(i-1);
+                GetBillListModel.ResultBean bean = model.getResult().get(i - 1);
                 StringBuilder sb = new StringBuilder();
 
-                sb.append("\n\r"+"预约人："+bean.getUser_Name() + "\n\r");
-                sb.append("驾校："+bean.getDrivSch_Name() + "\n\r");
-                sb.append("教练："+bean.getCoachUserName() + "\n\r");
-                sb.append("车牌："+bean.getCar_Brand() + "\n\r");
-                sb.append("手机号："+bean.getUser_Phone() + "\n\r");
-                sb.append("预约时间："+bean.getDStartTime()+"-"+bean.getDEndTime() + "\n\r");
-                sb.append("入场时间："+dateToString(bean.getDInTime()) + "\n\r");
-                sb.append("练车人数："+bean.getIPracticeNum() + "\n\r");
-                sb.append("订单号："+bean.getBillCode() + "\n\r");
-                sb.append("订单金额："+bean.getITotalMon() + "\n\r");
+                sb.append("\n\r" + "预约人：" + bean.getUser_Name() + "\n\r");
+                sb.append("驾校：" + bean.getDrivSch_Name() + "\n\r");
+                sb.append("教练：" + bean.getCoachUserName() + "\n\r");
+                sb.append("车牌：" + bean.getCar_Brand() + "\n\r");
+                sb.append("手机号：" + bean.getUser_Phone() + "\n\r");
+                sb.append("预约时间：" + bean.getDStartTime() + "-" + bean.getDEndTime() + "\n\r");
+                sb.append("入场时间：" + dateToString(bean.getDInTime()) + "\n\r");
+                sb.append("练车人数：" + bean.getIPracticeNum() + "\n\r");
+                sb.append("订单号：" + bean.getBillCode() + "\n\r");
+                sb.append("订单金额：" + bean.getITotalMon() + "\n\r");
 
 
                 tv.setText(sb.toString());
@@ -113,7 +120,7 @@ public class TimingActivity extends Activity {
                 listView.onRefreshComplete();
             }
         });
-
+        //listView.
         InitData();
 //        toggleHideyBar();
         handler.postDelayed(runnable, 1000);
@@ -143,7 +150,9 @@ public class TimingActivity extends Activity {
             case R.id.btnClear:
                 etPhone.setText("");
                 break;
-            case R.id.btnNull:
+            case R.id.btnDel:
+                if (etPhone.getText().length() > 0)
+                    etPhone.setText((etPhone.getText() + "").substring(0, etPhone.getText().length() - 1));
                 break;
             default:
                 String tempstr = "" + etPhone.getText() + ((Button) view).getText();
@@ -238,82 +247,93 @@ public class TimingActivity extends Activity {
 
     public void EnterFunciton() {
 
+        if (etPhone.getText().equals("")) {
+            Toast.makeText(TimingActivity.this, "请输入订单号", Toast.LENGTH_LONG).show();
+        } else {
+            new AlertDialog.Builder(TimingActivity.this)
+                    .setTitle("确认")
+                    .setMessage("确定入场吗？")
+                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
-        new AlertDialog.Builder(TimingActivity.this)
-                .setTitle("确认")
-                .setMessage("确定入场吗？")
-                .setPositiveButton("是", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                        HttpUtil hutil = new HttpUtil();
-                        HashMap<String, String> map = new HashMap();
+                            HttpUtil hutil = new HttpUtil();
+                            HashMap<String, String> map = new HashMap();
 
-                        map.put("BillNo", etPhone.getText().toString());
-                        hutil.requestAsyn("UpdateBillUseing", HttpUtil.TYPE_GET, map, new HttpUtil.ReqCallBack<Object>() {
-                            @Override
-                            public void onReqSuccess(Object result) {
-                                Gson gson = new Gson();
-                                NomalModel model = gson.fromJson(result.toString(), NomalModel.class);
-                                //  Toast.makeText(TimingActivity.this, model.getResult(), Toast.LENGTH_SHORT).show();
-                                if (model.getResultStatus().equals("Success")) {
-                                    etPhone.setText("");
-                                    InitData();
-                                } else {
-                                    Toast.makeText(TimingActivity.this, model.getResult().toString(), Toast.LENGTH_SHORT).show();
+                            map.put("BillNo", etPhone.getText().toString());
+                            hutil.requestAsyn("UpdateBillUseing", HttpUtil.TYPE_GET, map, new HttpUtil.ReqCallBack<Object>() {
+                                @Override
+                                public void onReqSuccess(Object result) {
+                                    Gson gson = new Gson();
+                                    NomalModel model = gson.fromJson(result.toString(), NomalModel.class);
+                                    //  Toast.makeText(TimingActivity.this, model.getResult(), Toast.LENGTH_SHORT).show();
+                                    if (model.getResultStatus().equals("Success")) {
+                                        etPhone.setText("");
+                                        InitData();
+                                        Toast.makeText(TimingActivity.this, "入场成功", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(TimingActivity.this, model.getResult().toString(), Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onReqFailed(String errorMsg) {
+                                @Override
+                                public void onReqFailed(String errorMsg) {
 
-                            }
-                        });
-                    }
-                })
-                .setNegativeButton("否", null)
-                .show();
+                                }
+                            });
 
 
+                        }
+                    })
+                    .setNegativeButton("否", null)
+                    .show();
+
+        }
     }
 
 
     public void ExitFunciton() {
-        new AlertDialog.Builder(getWindow().getContext())
-                .setTitle("确认")
-                .setMessage("确定退场吗？")
-                .setPositiveButton("是", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+        if (etPhone.getText().equals("")) {
+            Toast.makeText(TimingActivity.this, "请输入订单号", Toast.LENGTH_LONG).show();
+        } else {
+            new AlertDialog.Builder(getWindow().getContext())
+                    .setTitle("确认")
+                    .setMessage("确定退场吗？")
+                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                        HttpUtil hutil = new HttpUtil();
-                        HashMap<String, String> map = new HashMap();
+                            HttpUtil hutil = new HttpUtil();
+                            HashMap<String, String> map = new HashMap();
 
-                        map.put("BillNo", etPhone.getText().toString());
-                        hutil.requestAsyn("UpdateBillUseEnd", HttpUtil.TYPE_GET, map, new HttpUtil.ReqCallBack<Object>() {
-                            @Override
-                            public void onReqSuccess(Object result) {
-                                Gson gson = new Gson();
-                                NomalModel model = gson.fromJson(result.toString(), NomalModel.class);
+                            map.put("BillNo", etPhone.getText().toString());
+                            hutil.requestAsyn("UpdateBillUseEnd", HttpUtil.TYPE_GET, map, new HttpUtil.ReqCallBack<Object>() {
+                                @Override
+                                public void onReqSuccess(Object result) {
+                                    Gson gson = new Gson();
+                                    NomalModel model = gson.fromJson(result.toString(), NomalModel.class);
 
-                                if (model.getResultStatus().equals("Success")) {
-                                    etPhone.setText("");
-                                    InitData();
+                                    if (model.getResultStatus().equals("Success")) {
+                                        etPhone.setText("");
+                                        InitData();
+                                        Toast.makeText(TimingActivity.this, "退场成功", Toast.LENGTH_LONG).show();
 
-                                } else {
-                                    Toast.makeText(TimingActivity.this, model.getResult().toString(), Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(TimingActivity.this, model.getResult().toString(), Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onReqFailed(String errorMsg) {
+                                @Override
+                                public void onReqFailed(String errorMsg) {
 
-                            }
-                        });
-                    }
-                })
-                .setNegativeButton("否", null)
-                .show();
+                                }
+                            });
+                        }
+                    })
+                    .setNegativeButton("否", null)
+                    .show();
+        }
     }
 
 
@@ -355,6 +375,7 @@ public class TimingActivity extends Activity {
                 // 获取组件布局
                 LayoutInflater inflater = LayoutInflater.from(context);
                 convertView = inflater.inflate(R.layout.timing_item, null);
+
 
                 viewHolder = new ViewHolder();
                 viewHolder.tvCarNo = (TextView) convertView.findViewById(R.id.tvCarNo);
@@ -406,7 +427,7 @@ public class TimingActivity extends Activity {
 ////            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 ////            String dateStr = sdf.format(calendar.getTime());
             if (list.get(position).getiOverMINUTE() > 0) {
-                viewHolder.tvOvertime.setText(list.get(position).getiOverMINUTE()+"");
+                viewHolder.tvOvertime.setText(list.get(position).getiOverMINUTE() + "");
             } else {
                 viewHolder.tvOvertime.setText("0");
             }
@@ -461,14 +482,13 @@ public class TimingActivity extends Activity {
     }
 
 
-    public static String dateToString(Date time){
+    public static String dateToString(Date time) {
         SimpleDateFormat formatter;
-        formatter = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
+        formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String ctime = formatter.format(time);
 
         return ctime;
     }
-
 
 
     public void toggleHideyBar() {
