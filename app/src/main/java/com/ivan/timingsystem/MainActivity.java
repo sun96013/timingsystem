@@ -15,11 +15,11 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button btnLogin =(Button) findViewById(R.id.btnLogin);
+        Button btnLogin = (Button) findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(MainActivity.this,TimingActivity.class);
+                Intent intent = new Intent(MainActivity.this, TimingActivity.class);
                 startActivity(intent);
             }
         });

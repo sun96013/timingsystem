@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/tvCarNo"
-        android:layout_width="50px"
+        android:layout_width="40px"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
         android:gravity="center_vertical|center_horizontal"
-        android:padding="10dp"
+        android:padding="5dp"
         android:text="序号"
-        android:textSize="18sp"  />
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tvNowCarNo"
+        android:layout_width="30px"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:gravity="center_vertical|center_horizontal"
+        android:padding="5dp"
+        android:text="序号"
+        android:textSize="18sp" />
+
     <TextView
         android:id="@+id/tvRefSchoolName"
         android:layout_width="120px"
@@ -21,6 +33,7 @@
         android:padding="10dp"
         android:text="驾校"
         android:textSize="18sp" />
+
     <TextView
         android:id="@+id/tvRefName"
         android:layout_width="100px"
@@ -30,6 +43,7 @@
         android:padding="10dp"
         android:text="教练"
         android:textSize="18sp" />
+
     <TextView
         android:id="@+id/tvInTime"
         android:layout_width="120px"
@@ -39,6 +53,7 @@
         android:padding="10dp"
         android:text="入场时间"
         android:textSize="18sp" />
+
     <TextView
         android:id="@+id/tvOutTime"
         android:layout_width="120px"

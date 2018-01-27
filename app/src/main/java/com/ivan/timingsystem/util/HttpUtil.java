@@ -31,24 +31,18 @@ public class HttpUtil {
     public static final int TYPE_GET = 0;//get请求
     public static final int TYPE_POST_JSON = 1;//post请求参数为json
     public static final int TYPE_POST_FORM = 2;//post请求参数为表单
-    private OkHttpClient mOkHttpClient=new OkHttpClient();//okHttpClient 实例
-    private Handler okHttpHandler=new Handler();//全局处理子线程和M主线程通信
-
-
-
-
-
-
-
+    private OkHttpClient mOkHttpClient = new OkHttpClient();//okHttpClient 实例
+    private Handler okHttpHandler = new Handler();//全局处理子线程和M主线程通信
 
 
     /**
      * okHttp异步请求统一入口
+     *
      * @param actionUrl   接口地址
      * @param requestType 请求类型
      * @param paramsMap   请求参数
-     * @param callBack 请求返回数据回调
-     * @param <T> 数据泛型
+     * @param callBack    请求返回数据回调
+     * @param <T>         数据泛型
      **/
     public <T> Call requestAsyn(String actionUrl, int requestType, HashMap<String, String> paramsMap, ReqCallBack<T> callBack) {
         Call call = null;
@@ -72,11 +66,10 @@ public class HttpUtil {
      *
      * @param actionUrl 接口地址
      * @param paramsMap 请求参数
-     * @param callBack 请求返回数据回调
-     * @param <T> 数据泛型
+     * @param callBack  请求返回数据回调
+     * @param <T>       数据泛型
      * @return
      */
-
 
 
     public interface ReqCallBack<T> {
@@ -130,6 +123,7 @@ public class HttpUtil {
 
     /**
      * 统一为请求添加头信息
+     *
      * @return
      */
     private Request.Builder addHeaders() {
@@ -144,8 +138,9 @@ public class HttpUtil {
 
     /**
      * okHttp get同步请求
-     * @param actionUrl  接口地址
-     * @param paramsMap   请求参数
+     *
+     * @param actionUrl 接口地址
+     * @param paramsMap 请求参数
      */
     private void requestGetBySyn(String actionUrl, HashMap<String, String> paramsMap) {
         StringBuilder tempParams = new StringBuilder();
@@ -176,10 +171,11 @@ public class HttpUtil {
 
     /**
      * okHttp post异步请求
+     *
      * @param actionUrl 接口地址
      * @param paramsMap 请求参数
-     * @param callBack 请求返回数据回调
-     * @param <T> 数据泛型
+     * @param callBack  请求返回数据回调
+     * @param <T>       数据泛型
      * @return
      */
     private <T> Call requestPostByAsyn(String actionUrl, HashMap<String, String> paramsMap, final ReqCallBack<T> callBack) {
@@ -225,8 +221,9 @@ public class HttpUtil {
 
     /**
      * okHttp post同步请求
-     * @param actionUrl  接口地址
-     * @param paramsMap   请求参数
+     *
+     * @param actionUrl 接口地址
+     * @param paramsMap 请求参数
      */
     private void requestPostBySyn(String actionUrl, HashMap<String, String> paramsMap) {
         try {
@@ -261,8 +258,10 @@ public class HttpUtil {
             Log.e(TAG, e.toString());
         }
     }
+
     /**
      * okHttp post同步请求表单提交
+     *
      * @param actionUrl 接口地址
      * @param paramsMap 请求参数
      */
@@ -294,10 +293,11 @@ public class HttpUtil {
 
     /**
      * okHttp post异步请求表单提交
+     *
      * @param actionUrl 接口地址
      * @param paramsMap 请求参数
-     * @param callBack 请求返回数据回调
-     * @param <T> 数据泛型
+     * @param callBack  请求返回数据回调
+     * @param <T>       数据泛型
      * @return
      */
     private <T> Call requestPostByAsynWithForm(String actionUrl, HashMap<String, String> paramsMap, final ReqCallBack<T> callBack) {

@@ -23,6 +23,7 @@ public class RequestManager {
     public static final int TYPE_POST_FORM = 2;//post请求参数为表单
     private OkHttpClient mOkHttpClient;//okHttpClient 实例
     private Handler okHttpHandler;//全局处理子线程和M主线程通信
+
     /**
      * 初始化RequestManager
      */

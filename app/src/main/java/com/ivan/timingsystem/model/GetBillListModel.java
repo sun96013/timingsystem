@@ -2,6 +2,7 @@
  * Copyright 2018 bejson.com
  */
 package com.ivan.timingsystem.model;
+
 import java.util.Date;
 import java.util.List;
 
@@ -15,9 +16,11 @@ public class GetBillListModel {
 
     private String ResultStatus;
     private List<ResultBean> Result;
+
     public void setResultStatus(String ResultStatus) {
         this.ResultStatus = ResultStatus;
     }
+
     public String getResultStatus() {
         return ResultStatus;
     }
@@ -25,6 +28,7 @@ public class GetBillListModel {
     public void setResult(List<ResultBean> Result) {
         this.Result = Result;
     }
+
     public List<ResultBean> getResult() {
         return Result;
     }
@@ -79,6 +83,16 @@ public class GetBillListModel {
         private String dOutTime;
         private double iPreMon;
         private int Car_SortNo;
+        private int cRealCarInfo;
+
+        public int getcRealCarInfo() {
+            return cRealCarInfo;
+        }
+
+        public void setcRealCarInfo(int cRealCarInfo) {
+            this.cRealCarInfo = cRealCarInfo;
+        }
+
         private String Car_Type;
         private String Car_Brand;
         private String cCode;
@@ -87,8 +101,8 @@ public class GetBillListModel {
         private String DrivSch_Name;
         private String BillStatusType;
         private String OverType;
-        private long  iOverMINUTE;
-        private Date  dPreEndTime;
+        private long iOverMINUTE;
+        private Date dPreEndTime;
 
         public long getiOverMINUTE() {
             return iOverMINUTE;
@@ -109,6 +123,7 @@ public class GetBillListModel {
         public void setID(int ID) {
             this.ID = ID;
         }
+
         public int getID() {
             return ID;
         }
@@ -116,6 +131,7 @@ public class GetBillListModel {
         public void setCar_ID(int Car_ID) {
             this.Car_ID = Car_ID;
         }
+
         public int getCar_ID() {
             return Car_ID;
         }
@@ -123,6 +139,7 @@ public class GetBillListModel {
         public void setTestType_ID(int TestType_ID) {
             this.TestType_ID = TestType_ID;
         }
+
         public int getTestType_ID() {
             return TestType_ID;
         }
@@ -130,6 +147,7 @@ public class GetBillListModel {
         public void setBReservation(boolean bReservation) {
             this.bReservation = bReservation;
         }
+
         public boolean getBReservation() {
             return bReservation;
         }
@@ -137,6 +155,7 @@ public class GetBillListModel {
         public void setDModDate(String dModDate) {
             this.dModDate = dModDate;
         }
+
         public String getDModDate() {
             return dModDate;
         }
@@ -144,6 +163,7 @@ public class GetBillListModel {
         public void setDReservationDay(Date dReservationDay) {
             this.dReservationDay = dReservationDay;
         }
+
         public Date getDReservationDay() {
             return dReservationDay;
         }
@@ -151,6 +171,7 @@ public class GetBillListModel {
         public void setDStartTime(String dStartTime) {
             this.dStartTime = dStartTime;
         }
+
         public String getDStartTime() {
             return dStartTime;
         }
@@ -158,6 +179,7 @@ public class GetBillListModel {
         public void setDEndTime(String dEndTime) {
             this.dEndTime = dEndTime;
         }
+
         public String getDEndTime() {
             return dEndTime;
         }
@@ -165,6 +187,7 @@ public class GetBillListModel {
         public void setBDelFlag(boolean bDelFlag) {
             this.bDelFlag = bDelFlag;
         }
+
         public boolean getBDelFlag() {
             return bDelFlag;
         }
@@ -172,6 +195,7 @@ public class GetBillListModel {
         public void setBillStatus(int BillStatus) {
             this.BillStatus = BillStatus;
         }
+
         public int getBillStatus() {
             return BillStatus;
         }
@@ -179,6 +203,7 @@ public class GetBillListModel {
         public void setCMemo(String cMemo) {
             this.cMemo = cMemo;
         }
+
         public String getCMemo() {
             return cMemo;
         }
@@ -186,6 +211,7 @@ public class GetBillListModel {
         public void setBillCode(String BillCode) {
             this.BillCode = BillCode;
         }
+
         public String getBillCode() {
             return BillCode;
         }
@@ -193,6 +219,7 @@ public class GetBillListModel {
         public void setIAppTimeNum(int iAppTimeNum) {
             this.iAppTimeNum = iAppTimeNum;
         }
+
         public int getIAppTimeNum() {
             return iAppTimeNum;
         }
@@ -200,6 +227,7 @@ public class GetBillListModel {
         public void setMakeUserID(int MakeUserID) {
             this.MakeUserID = MakeUserID;
         }
+
         public int getMakeUserID() {
             return MakeUserID;
         }
@@ -207,6 +235,7 @@ public class GetBillListModel {
         public void setDCreateDate(Date dCreateDate) {
             this.dCreateDate = dCreateDate;
         }
+
         public Date getDCreateDate() {
             return dCreateDate;
         }
@@ -214,6 +243,7 @@ public class GetBillListModel {
         public void setITotalMon(double iTotalMon) {
             this.iTotalMon = iTotalMon;
         }
+
         public double getITotalMon() {
             return iTotalMon;
         }
@@ -221,6 +251,7 @@ public class GetBillListModel {
         public void setIRelMon(double iRelMon) {
             this.iRelMon = iRelMon;
         }
+
         public double getIRelMon() {
             return iRelMon;
         }
@@ -228,6 +259,7 @@ public class GetBillListModel {
         public void setIIntegralUse(int iIntegralUse) {
             this.iIntegralUse = iIntegralUse;
         }
+
         public int getIIntegralUse() {
             return iIntegralUse;
         }
@@ -235,6 +267,7 @@ public class GetBillListModel {
         public void setPayWay(String PayWay) {
             this.PayWay = PayWay;
         }
+
         public String getPayWay() {
             return PayWay;
         }
@@ -242,6 +275,7 @@ public class GetBillListModel {
         public void setBReturn(boolean bReturn) {
             this.bReturn = bReturn;
         }
+
         public boolean getBReturn() {
             return bReturn;
         }
@@ -249,6 +283,7 @@ public class GetBillListModel {
         public void setPayDate(Date PayDate) {
             this.PayDate = PayDate;
         }
+
         public Date getPayDate() {
             return PayDate;
         }
@@ -256,6 +291,7 @@ public class GetBillListModel {
         public void setRetrunDate(String RetrunDate) {
             this.RetrunDate = RetrunDate;
         }
+
         public String getRetrunDate() {
             return RetrunDate;
         }
@@ -263,6 +299,7 @@ public class GetBillListModel {
         public void setWeiXinOrderID(String WeiXinOrderID) {
             this.WeiXinOrderID = WeiXinOrderID;
         }
+
         public String getWeiXinOrderID() {
             return WeiXinOrderID;
         }
@@ -270,6 +307,7 @@ public class GetBillListModel {
         public void setCoachUserName(String CoachUserName) {
             this.CoachUserName = CoachUserName;
         }
+
         public String getCoachUserName() {
             return CoachUserName;
         }
@@ -277,6 +315,7 @@ public class GetBillListModel {
         public void setContactPhone(String ContactPhone) {
             this.ContactPhone = ContactPhone;
         }
+
         public String getContactPhone() {
             return ContactPhone;
         }
@@ -284,6 +323,7 @@ public class GetBillListModel {
         public void setAppType(String AppType) {
             this.AppType = AppType;
         }
+
         public String getAppType() {
             return AppType;
         }
@@ -291,6 +331,7 @@ public class GetBillListModel {
         public void setDOverdueTime(Date dOverdueTime) {
             this.dOverdueTime = dOverdueTime;
         }
+
         public Date getDOverdueTime() {
             return dOverdueTime;
         }
@@ -298,6 +339,7 @@ public class GetBillListModel {
         public void setBModify(boolean bModify) {
             this.bModify = bModify;
         }
+
         public boolean getBModify() {
             return bModify;
         }
@@ -305,6 +347,7 @@ public class GetBillListModel {
         public void setBOverTime(boolean bOverTime) {
             this.bOverTime = bOverTime;
         }
+
         public boolean getBOverTime() {
             return bOverTime;
         }
@@ -312,6 +355,7 @@ public class GetBillListModel {
         public void setIPracticeNum(int iPracticeNum) {
             this.iPracticeNum = iPracticeNum;
         }
+
         public int getIPracticeNum() {
             return iPracticeNum;
         }
@@ -319,6 +363,7 @@ public class GetBillListModel {
         public void setPracticeUserIDs(String PracticeUserIDs) {
             this.PracticeUserIDs = PracticeUserIDs;
         }
+
         public String getPracticeUserIDs() {
             return PracticeUserIDs;
         }
@@ -326,6 +371,7 @@ public class GetBillListModel {
         public void setPracticeUserName(String PracticeUserName) {
             this.PracticeUserName = PracticeUserName;
         }
+
         public String getPracticeUserName() {
             return PracticeUserName;
         }
@@ -333,6 +379,7 @@ public class GetBillListModel {
         public void setBJPracticeUserIDs(String BJPracticeUserIDs) {
             this.BJPracticeUserIDs = BJPracticeUserIDs;
         }
+
         public String getBJPracticeUserIDs() {
             return BJPracticeUserIDs;
         }
@@ -340,6 +387,7 @@ public class GetBillListModel {
         public void setBJPracticeUserName(String BJPracticeUserName) {
             this.BJPracticeUserName = BJPracticeUserName;
         }
+
         public String getBJPracticeUserName() {
             return BJPracticeUserName;
         }
@@ -347,6 +395,7 @@ public class GetBillListModel {
         public void setBOverTimeFree(boolean bOverTimeFree) {
             this.bOverTimeFree = bOverTimeFree;
         }
+
         public boolean getBOverTimeFree() {
             return bOverTimeFree;
         }
@@ -354,6 +403,7 @@ public class GetBillListModel {
         public void setIOverTimeMon(String iOverTimeMon) {
             this.iOverTimeMon = iOverTimeMon;
         }
+
         public String getIOverTimeMon() {
             return iOverTimeMon;
         }
@@ -361,6 +411,7 @@ public class GetBillListModel {
         public void setBOverPay(boolean bOverPay) {
             this.bOverPay = bOverPay;
         }
+
         public boolean getBOverPay() {
             return bOverPay;
         }
@@ -368,6 +419,7 @@ public class GetBillListModel {
         public void setBAllowMoreCar(boolean bAllowMoreCar) {
             this.bAllowMoreCar = bAllowMoreCar;
         }
+
         public boolean getBAllowMoreCar() {
             return bAllowMoreCar;
         }
@@ -375,6 +427,7 @@ public class GetBillListModel {
         public void setDInTime(Date dInTime) {
             this.dInTime = dInTime;
         }
+
         public Date getDInTime() {
             return dInTime;
         }
@@ -382,6 +435,7 @@ public class GetBillListModel {
         public void setDOutTime(String dOutTime) {
             this.dOutTime = dOutTime;
         }
+
         public String getDOutTime() {
             return dOutTime;
         }
@@ -389,6 +443,7 @@ public class GetBillListModel {
         public void setIPreMon(double iPreMon) {
             this.iPreMon = iPreMon;
         }
+
         public double getIPreMon() {
             return iPreMon;
         }
@@ -396,6 +451,7 @@ public class GetBillListModel {
         public void setCar_SortNo(int Car_SortNo) {
             this.Car_SortNo = Car_SortNo;
         }
+
         public int getCar_SortNo() {
             return Car_SortNo;
         }
@@ -403,6 +459,7 @@ public class GetBillListModel {
         public void setCar_Type(String Car_Type) {
             this.Car_Type = Car_Type;
         }
+
         public String getCar_Type() {
             return Car_Type;
         }
@@ -410,6 +467,7 @@ public class GetBillListModel {
         public void setCar_Brand(String Car_Brand) {
             this.Car_Brand = Car_Brand;
         }
+
         public String getCar_Brand() {
             return Car_Brand;
         }
@@ -417,6 +475,7 @@ public class GetBillListModel {
         public void setCCode(String cCode) {
             this.cCode = cCode;
         }
+
         public String getCCode() {
             return cCode;
         }
@@ -424,6 +483,7 @@ public class GetBillListModel {
         public void setUser_Name(String User_Name) {
             this.User_Name = User_Name;
         }
+
         public String getUser_Name() {
             return User_Name;
         }
@@ -431,6 +491,7 @@ public class GetBillListModel {
         public void setUser_Phone(String User_Phone) {
             this.User_Phone = User_Phone;
         }
+
         public String getUser_Phone() {
             return User_Phone;
         }
@@ -438,6 +499,7 @@ public class GetBillListModel {
         public void setDrivSch_Name(String DrivSch_Name) {
             this.DrivSch_Name = DrivSch_Name;
         }
+
         public String getDrivSch_Name() {
             return DrivSch_Name;
         }
@@ -445,6 +507,7 @@ public class GetBillListModel {
         public void setBillStatusType(String BillStatusType) {
             this.BillStatusType = BillStatusType;
         }
+
         public String getBillStatusType() {
             return BillStatusType;
         }
@@ -452,6 +515,7 @@ public class GetBillListModel {
         public void setOverType(String OverType) {
             this.OverType = OverType;
         }
+
         public String getOverType() {
             return OverType;
         }
