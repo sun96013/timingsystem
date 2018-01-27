@@ -87,8 +87,19 @@
                         android:layout_gravity="center_vertical|center_horizontal"
                         android:layout_weight="1"
                         android:gravity="center_vertical|center_horizontal"
-                        android:padding="10dp"
-                        android:text="车号"
+
+                        android:text="原"
+                        android:textSize="18sp" />
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|center_horizontal"
+
+                        android:text="现"
                         android:textSize="18sp" />
 
                     <TextView
@@ -101,6 +112,7 @@
                         android:padding="10dp"
                         android:text="驾校"
                         android:textSize="18sp" />
+
                     <TextView
 
                         android:layout_width="wrap_content"

@@ -15,17 +15,24 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bigkoo.pickerview.adapter.WheelAdapter;
+import com.bigkoo.pickerview.lib.WheelView;
+import com.bigkoo.pickerview.listener.OnItemSelectedListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.ivan.timingsystem.model.GetBillListModel;
 import com.ivan.timingsystem.model.NomalModel;
 import com.ivan.timingsystem.util.HttpUtil;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -38,6 +45,7 @@ public class TimingActivity extends Activity {
     com.handmark.pulltorefresh.library.PullToRefreshListView listView;
     int refreshListIndex = 0;
     GetBillListModel model;
+    String selectedtext = "0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -251,7 +259,7 @@ public class TimingActivity extends Activity {
 
             HttpUtil hutil1 = new HttpUtil();
             HashMap<String, String> map1 = new HashMap<String, String>();
-            map1.put("BillNo",etPhone.getText()+"");
+            map1.put("BillNo", etPhone.getText() + "");
             hutil1.requestAsyn("GetBillInfo", HttpUtil.TYPE_GET, map1, new HttpUtil.ReqCallBack<Object>() {
                 @Override
                 public void onReqSuccess(Object result) {
@@ -259,11 +267,13 @@ public class TimingActivity extends Activity {
                     Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
                     final NomalModel model = gson.fromJson(result.toString(), NomalModel.class);
                     if (model.getResultStatus().equals("Success")) {
-                        final GetBillListModel.ResultBean bean = gson.fromJson(result.toString(), GetBillListModel.ResultBean.class);
+                        final GetBillListModel.ResultBean bean = gson.fromJson(gson.toJson(model.getResult()), GetBillListModel.ResultBean.class);
                         Log.d("onReqSuccess", result.toString());
+                        selectedtext = "0";
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                LinearLayout ll = new LinearLayout(TimingActivity.this);
                                 TextView tv = new TextView(TimingActivity.this);
                                 StringBuilder sb = new StringBuilder();
 
@@ -273,7 +283,7 @@ public class TimingActivity extends Activity {
                                 sb.append("车牌：" + bean.getCar_Brand() + "\n\r");
                                 sb.append("手机号：" + bean.getUser_Phone() + "\n\r");
                                 sb.append("预约时间：" + bean.getDStartTime() + "-" + bean.getDEndTime() + "\n\r");
-                              //  sb.append("入场时间：" + dateToString(bean.getDInTime()) + "\n\r");
+                                //  sb.append("入场时间：" + dateToString(bean.getDInTime()) + "\n\r");
                                 sb.append("练车人数：" + bean.getIPracticeNum() + "\n\r");
                                 sb.append("订单号：" + bean.getBillCode() + "\n\r");
                                 sb.append("订单金额：" + bean.getITotalMon() + "\n\r");
@@ -281,9 +291,95 @@ public class TimingActivity extends Activity {
 
                                 tv.setText(sb.toString());
                                 tv.setTextSize(30);
+                                ll.addView(tv);
+                                final Button button = new Button(TimingActivity.this);
+                                button.setText("点我更换车号");
+
+                                ll.addView(button);
+                                ll.setOrientation(LinearLayout.VERTICAL);
+                                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.
+                                        LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                button.setLayoutParams(param);
+                                button.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                        //开始调取车辆信息
+                                        HttpUtil hutil1 = new HttpUtil();
+                                        HashMap<String, String> map1 = new HashMap<String, String>();
+                                        map1.put("BillNo", etPhone.getText() + "");
+                                        hutil1.requestAsyn("GetReplaceCarSortNoList", HttpUtil.TYPE_GET, map1, new HttpUtil.ReqCallBack<Object>() {
+                                            @Override
+                                            public void onReqSuccess(Object result) {
+                                                //  Gson gson = new Gson();
+                                                Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+
+
+                                                final NomalModel model = gson.fromJson(result.toString(), NomalModel.class);
+                                                if (model.getResultStatus().equals("Success")) {
+                                                    Log.d("onReqSuccess开始调取车辆信息", gson.toJson(model.getResult()));
+                                                    final List<Integer> list = gson.fromJson(gson.toJson(model.getResult()), new TypeToken<List<Integer>>() {
+                                                    }.getType());
+                                                    final WheelView wheelView = new WheelView(TimingActivity.this);
+
+                                                    wheelView.setTextSize(50);
+
+                                                    wheelView.setAdapter(new WheelAdapter() {
+                                                        @Override
+                                                        public int getItemsCount() {
+                                                            return list.size();
+                                                        }
+
+                                                        @Override
+                                                        public Object getItem(int index) {
+                                                            return list.get(index);
+                                                        }
+
+                                                        @Override
+                                                        public int indexOf(Object o) {
+                                                            return list.indexOf(o);
+                                                        }
+                                                    });
+
+
+                                                    wheelView.setOnItemSelectedListener(new OnItemSelectedListener() {
+                                                        @Override
+                                                        public void onItemSelected(int index) {
+                                                            selectedtext = list.get(index) + "";
+                                                        }
+                                                    });
+                                                    new AlertDialog.Builder(TimingActivity.this)
+                                                            .setTitle("选择车号")
+                                                            .setView(wheelView)
+                                                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    selectedtext = list.get(wheelView.getCurrentItem()) + "";
+
+                                                                    Toast.makeText(TimingActivity.this,
+                                                                            "您选择了" + selectedtext,
+                                                                            Toast.LENGTH_SHORT).show();
+                                                                    button.setText("点我更换车号（当前选择的是" + selectedtext + "号车）");
+                                                                }
+                                                            })
+                                                            .show();
+
+                                                }
+
+                                            }
+
+                                            @Override
+                                            public void onReqFailed(String errorMsg) {
+
+                                            }
+                                        });
+
+
+                                    }
+                                });
                                 new AlertDialog.Builder(TimingActivity.this)
-                                        .setTitle("确认入场吗？").setView(tv)
-                                        .setPositiveButton("确定",  new DialogInterface.OnClickListener() {
+                                        .setTitle("确认入场吗？").setView(ll)
+                                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -292,6 +388,7 @@ public class TimingActivity extends Activity {
                                                 HashMap<String, String> map = new HashMap();
 
                                                 map.put("BillNo", etPhone.getText().toString());
+                                                map.put("CarSortNo", selectedtext);
                                                 hutil.requestAsyn("UpdateBillUseing", HttpUtil.TYPE_GET, map, new HttpUtil.ReqCallBack<Object>() {
                                                     @Override
                                                     public void onReqSuccess(Object result) {
@@ -326,9 +423,7 @@ public class TimingActivity extends Activity {
                             }
                         });
 
-                    }
-                    else
-                    {
+                    } else {
                         Toast.makeText(TimingActivity.this, model.getResult().toString(), Toast.LENGTH_LONG).show();
                     }
 
@@ -340,47 +435,6 @@ public class TimingActivity extends Activity {
                 }
             });
 
-
-
-
-//            new AlertDialog.Builder(TimingActivity.this)
-//                    .setTitle("确认")
-//                    .setMessage("确定入场吗？")
-//                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//
-//
-//                            HttpUtil hutil = new HttpUtil();
-//                            HashMap<String, String> map = new HashMap();
-//
-//                            map.put("BillNo", etPhone.getText().toString());
-//                            hutil.requestAsyn("UpdateBillUseing", HttpUtil.TYPE_GET, map, new HttpUtil.ReqCallBack<Object>() {
-//                                @Override
-//                                public void onReqSuccess(Object result) {
-//                                    Gson gson = new Gson();
-//                                    NomalModel model = gson.fromJson(result.toString(), NomalModel.class);
-//                                    //  Toast.makeText(TimingActivity.this, model.getResult(), Toast.LENGTH_SHORT).show();
-//                                    if (model.getResultStatus().equals("Success")) {
-//                                        etPhone.setText("");
-//                                        InitData();
-//                                        Toast.makeText(TimingActivity.this, "入场成功", Toast.LENGTH_LONG).show();
-//                                    } else {
-//                                        Toast.makeText(TimingActivity.this, model.getResult().toString(), Toast.LENGTH_SHORT).show();
-//                                    }
-//                                }
-//
-//                                @Override
-//                                public void onReqFailed(String errorMsg) {
-//
-//                                }
-//                            });
-//
-//
-//                        }
-//                    })
-//                    .setNegativeButton("否", null)
-//                    .show();
 
         }
     }
@@ -472,6 +526,7 @@ public class TimingActivity extends Activity {
 
                 viewHolder = new ViewHolder();
                 viewHolder.tvCarNo = (TextView) convertView.findViewById(R.id.tvCarNo);
+                viewHolder.tvNowCarNo = (TextView) convertView.findViewById(R.id.tvNowCarNo);
                 viewHolder.tvRefSchoolName = (TextView) convertView.findViewById(R.id.tvRefSchoolName);
                 viewHolder.tvRefName = (TextView) convertView.findViewById(R.id.tvRefName);
                 viewHolder.tvInTime = (TextView) convertView.findViewById(R.id.tvInTime);
@@ -486,7 +541,8 @@ public class TimingActivity extends Activity {
             // 绑定数据、以及事件触发
             //    Log.d("Timing",list.get(position).getCar_ID()+"");
             viewHolder.tvCarNo.setTag(list.get(position).getBillCode() + "");
-            viewHolder.tvCarNo.setText(list.get(position).getCar_ID() + "");
+            viewHolder.tvCarNo.setText(list.get(position).getCar_SortNo() + "");
+            viewHolder.tvNowCarNo.setText(list.get(position).getcRealCarInfo() + "");
             viewHolder.tvRefSchoolName.setText(list.get(position).getDrivSch_Name() + "");
             viewHolder.tvRefName.setText(list.get(position).getCoachUserName() + "");
             viewHolder.tvInTime.setText(dateToString(list.get(position).getDInTime()));
@@ -530,6 +586,7 @@ public class TimingActivity extends Activity {
 
         class ViewHolder {
             TextView tvCarNo;
+            TextView tvNowCarNo;
             TextView tvRefSchoolName;
             TextView tvRefName;
             TextView tvInTime;
